@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Favoritos</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/css/styles.css" rel="stylesheet"/>
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon"/>
+</head>
+<body>
+
+<div th:replace="~{componentes/nav/sidebar :: sidebar}"></div>
+<nav th:replace="~{componentes/nav/nav-dashobard :: navdashboard}"></nav>
+<div class="container">
+    <div class="row">
+        <div
+                class="text-center"
+                th:if="${#lists.size(imoveis) == 0}"
+        >
+            Você não possui nenhum anúncio favoritado.
+
+        </div>
+        <h3 class="text-center" th:unless="${#lists.size(imoveis) == 0}">Meus Favoritos</h3>
+        <div
+                th:fragment="card"
+                class="col-md-4 my-2"
+                th:each="imovel : ${imoveis}"
+        >
+            <div class="card">
+
+                <img class="card-img card-img-top"  src="/assets/favoritado.jpg"
+                     th:alt="${imovel.descricao}">
+
+                <div class="card-body">
+                    <h2 class="card-title" th:utext="${imovel.getNome()}"></h2>
+                    <span
+                            th:class="'badge '+${imovel.disponivel ? 'bg-success': 'bg-danger'}"
+                            th:text="${imovel.disponivel? 'Disponível': 'Vendido'}"
+                    >Disponível</span
+                    >
+                    <p
+                            class="card-text text-truncate"
+                            th:text="${imovel.descricao}"
+                    >
+                        Carregando...
+                    </p>
+                    <p>
+                        Publicado em:
+                        <time
+                                th:datetime="${imovel.dataCadastro}"
+                                datetime="2023-04-05"
+                                class="text-primary font-weight-bold"
+                                th:text="${#calendars.format(imovel.dataCadastro,'dd MMMM yyyy')}"
+                        >5 de abril de 2023
+                        </time>
+                    </p>
+
+                    <div class="btn-group gap-4">
+                        <a
+                                th:href="@{/imoveis/detalhes/{id}  (id=${imovel.id})}"
+                                class="icon-link btn-link text-decoration-none"
+                        >
+                            <img
+                                    src="/assets/open-outline.svg"
+                                    alt="Detalhes"
+                                    width="20"
+                                    height="20"
+                                    class="teste"
+                            />
+                            Detalhes
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script src="/js/bootstrap.min.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+
+
+</html>

@@ -1,0 +1,11 @@
+
+.text-yellow {
+    color: #ffba08;
+}
+
+.text-yellow:hover {
+    color: #faa307;
+    fill: #faa307;
+    stroke: #faa307;
+
+}

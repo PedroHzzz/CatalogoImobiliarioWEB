@@ -1,0 +1,66 @@
+<div th:fragment="sidebar" class="offcanvas offcanvas-start  bg-light" data-bs-scroll="true" tabindex="-1"
+     id="offcanvasWithBothOptions"
+     aria-labelledby="offcanvasWithBothOptionsLabel">
+    <div class="offcanvas-header ">
+        <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Bem-vindo </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body ">
+
+        <ul class="nav nav-pills fs-5 flex-column mb-auto">
+            <li class="nav-item">
+                <a href="/" class="nav-link active icon-link-hover" aria-current="page">
+                    <ion-icon name="home-outline"></ion-icon>
+                    Página inicial
+                </a>
+            </li>
+            <li>
+                <a href="/anuncios" class="nav-link link-dark icon-link-hover">
+                    <ion-icon name="business-outline"></ion-icon>
+                    Meus anúncios
+                </a>
+                <li>
+                <a href="/dashboard/favoritos" class="nav-link link-dark icon-link-hover">
+                        <ion-icon name="star-outline"></ion-icon>
+                        Meus favoritos
+                    </a>
+                </li>
+            </li>
+            <li>
+                <a href="/agendamentos" class="nav-link link-dark icon-link-hover">
+                    <ion-icon name="chatbubbles-outline"></ion-icon>
+                    Visualizar agendamentos
+                </a>
+            </li>
+            <li>
+                <a href="https://wa.link/wat8zy" class="nav-link link-dark icon-link-hover">
+                    <ion-icon name="construct-outline"></ion-icon>
+                    Contatar o suporte
+                </a>
+            </li>
+            <li>
+                <a href="/dashboard/user/detalhes" class="nav-link link-dark icon-link-hover">
+                    <ion-icon size="medium" name="person-circle-outline"></ion-icon>
+                    Ver perfil
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link  link-dark icon-link-hover">
+                    <ion-icon  name="settings-outline"></ion-icon>
+                    Configurações
+                </a>
+            </li>
+        </ul>
+        <hr>
+        <div class="dropdown position-fixed bottom-0 mb-2">
+            <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle"
+               id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="/assets/logo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                <strong>Mais opções</strong>
+            </a>
+            <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+                <li><a class="dropdown-item" href="/logout">Sair</a></li>
+            </ul>
+        </div>
+    </div>
+</div>

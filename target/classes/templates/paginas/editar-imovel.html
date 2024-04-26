@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Cadastrar um Imóvel</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
+  </head>
+  <body>
+    <nav th:replace="~{componentes/nav/voltar :: voltar}"></nav>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h1 th:text="${'Editando Imóvel - '+ imovel.nome}" class="mt-2">
+            Editando Imóvel
+          </h1>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <form
+        enctype="multipart/form-data"
+        th:action="@{/imoveis/editar/{id} (id=${imovel.id})}"
+        method="POST"
+        class="mt-3"
+        th:object="${imovelDTO}"
+      >
+        <input type="hidden" th:value="${imovel.id}" />
+        <div class="mb-3">
+          <label for="nome" class="form-label">Título</label>
+          <input
+            th:errorclass="is-invalid"
+            th:value="${imovel.nome}"
+            type="text"
+            class="form-control"
+            placeholder="Imóvel de frente para o mar"
+            id="nome"
+            name="nome"
+            aria-describedby="nameHelp"
+          />
+          <div class="invalid-feedback" th:errors="${imovelDTO.nome}"></div>
+
+          <div id="nameHelp" class="form-text">
+            Será o título do seu imóvel que será exibido na página de busca
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="descricao" class="form-label">Descrição</label>
+          <input
+            th:errorclass="is-invalid"
+            th:value="${imovel.descricao}"
+            type="text"
+            class="form-control"
+            id="descricao"
+            name="descricao"
+            placeholder="Este imóvel possui  3 quartos, 2 banheiros, 1 sala, 1 cozinha, 1 garagem..."
+          />
+        </div>
+        <div class="invalid-feedback" th:errors="${imovelDTO.descricao}"></div>
+        <div class="mb-3">
+          <label for="tamanho" class="form-label"
+            >Tamanho em m<sup>2</sup>
+          </label>
+          <input
+            th:errorclass="is-invalid"
+            th:value="${imovel.tamanho}"
+            type="number"
+            class="form-control"
+            id="tamanho"
+            name="tamanho"
+            placeholder="300"
+          />
+        </div>
+        <div class="invalid-feedback" th:errors="${imovelDTO.tamanho}"></div>
+
+        <div class="mb-3">
+          <label for="precoCompra" class="form-label">Preço de compra</label>
+          <input
+            th:errorclass="is-invalid"
+            th:value="${imovel.precoCompra}"
+            type="number"
+            class="form-control"
+            placeholder="R$ 100000"
+            id="precoCompra"
+            name="precoCompra"
+            aria-describedby="nameHelp"
+          />
+          <div
+            class="invalid-feedback"
+            th:errors="${imovelDTO.precoCompra}"
+          ></div>
+        </div>
+        <div class="mb-3">
+          <label for="precoAluguel" class="form-label">Preço para Alugar</label>
+          <input
+            th:errorclass="is-invalid"
+            th:value="${imovel.precoAluguel}"
+            type="number"
+            class="form-control"
+            id="precoAluguel"
+            name="precoAluguel"
+            placeholder="R$ 2000"
+          />
+          <div
+            class="invalid-feedback"
+            th:errors="${imovelDTO.precoAluguel}"
+          ></div>
+
+          <div class="mb-3">
+            <label for="quantidadeQuartos" class="form-label"
+              >Quantidade de quartos</label
+            >
+            <input
+              th:errorclass="is-invalid"
+              th:value="${imovel.quantidadeQuartos}"
+              type="number"
+              class="form-control"
+              id="quantidadeQuartos"
+              name="quantidadeQuartos"
+              placeholder="2000"
+            />
+            <div
+              class="invalid-feedback"
+              th:errors="${imovelDTO.quantidadeQuartos}"
+            ></div>
+          </div>
+          <div class="mb-3">
+            <label for="quantidadeBanheiros" class="form-label"
+              >Quantidade de banheiros</label
+            >
+            <input
+              th:errorclass="is-invalid"
+              th:value="${imovel.quantidadeBanheiros}"
+              type="number"
+              class="form-control"
+              id="quantidadeBanheiros"
+              name="quantidadeBanheiros"
+              placeholder="2000"
+            />
+            <div
+              class="invalid-feedback"
+              th:errors="${imovelDTO.quantidadeBanheiros}"
+            ></div>
+          </div>
+          <div class="mb-3">
+            <label for="garagem" class="form-label"
+              >Quantidade de espaços disponíveis na garagem</label
+            >
+            <input
+              th:errorclass="is-invalid"
+              th:value="${imovel.garagem}"
+              type="number"
+              class="form-control"
+              id="garagem"
+              name="garagem"
+              placeholder="2000"
+            />
+            <div
+              class="invalid-feedback"
+              th:errors="${imovelDTO.garagem}"
+            ></div>
+          </div>
+          <div class="mb-3">
+            <label for="file" class="form-label">Imagem do imóvel</label>
+            <input
+              accept="image/png, image/gif, image/jpeg"
+              class="form-control form-control-sm"
+              id="file"
+              name="file"
+              type="file"
+            />
+            <span class="text-muted">A imagem deve ter no máximo 10MB</span>
+          </div>
+          <span class="text-dark"> Imagem atual</span>
+          <div class="mb-3">
+            <img
+              th:src="${imovel.foto == null ? '/assets/not-found.jpg': '/image/' + imovel.foto}"
+              th:class="'card-img' + 'card-img-top'"
+              height="400"
+              th:alt="${imovel.nome}"
+            />
+          </div>
+
+          <div class="mb-3 form-check">
+            <input
+              th:value="${imovel.disponivel}"
+              th:field="${imovelDTO.disponivel}"
+              type="checkbox"
+              class="form-check-input"
+              id="disponivel"
+              name="disponivel"
+            />
+            <label class="form-check-label" for="disponivel">
+              Disponível para compra
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary">
+            Atualizar dados do imóvel
+          </button>
+        </div>
+      </form>
+    </div>
+  </body>
+  <script src="https://unpkg.com/imask"></script>
+</html>

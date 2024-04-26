@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/css/styles.css" rel="stylesheet"/>
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon"/>
+</head>
+<body>
+<nav th:replace="~{componentes/nav/nav-dashobard :: navdashboard}"></nav>
+<div th:fragment="sidebar" class="offcanvas offcanvas-start  bg-light" data-bs-scroll="true" tabindex="-1"
+     id="offcanvasWithBothOptions"
+     aria-labelledby="offcanvasWithBothOptionsLabel">
+    <div class="offcanvas-header ">
+        <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Bem-vindo </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body ">
+
+        <ul class="nav nav-pills fs-5 flex-column mb-auto">
+            <li class="nav-item">
+                <a href="/" class="nav-link link-dark icon-link-hover" aria-current="page">
+                    <ion-icon name="home-outline"></ion-icon>
+                    Página inicial
+                </a>
+            </li>
+            <li>
+                <a href="/anuncios" class="nav-link link-dark icon-link-hover">
+                    <ion-icon name="business-outline"></ion-icon>
+                    Meus anúncios
+                </a>
+            </li>
+            <li>
+                <a href="/anuncios" class="nav-link link-dark icon-link-hover">
+                    <ion-icon name="cart-outline"></ion-icon>
+                    Minhas compras
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link link-dark active icon-link-hover">
+                    <ion-icon name="chatbubbles-outline"></ion-icon>
+                    Visualizar agendamentos
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link link-dark icon-link-hover">
+                    <ion-icon name="construct-outline"></ion-icon>
+                    Contatar o suporte
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link link-dark icon-link-hover">
+                    <ion-icon size="medium" name="person-circle-outline"></ion-icon>
+                    Ver perfil
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link  link-dark icon-link-hover">
+                    <ion-icon name="settings-outline"></ion-icon>
+                    Configurações
+                </a>
+            </li>
+        </ul>
+        <hr>
+        <div class="dropdown position-fixed bottom-0 mb-2">
+            <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle"
+               id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="/assets/logo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                <strong>Mais opções</strong>
+            </a>
+            <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+                <li><a class="dropdown-item" href="#">Lorem</a></li>
+                <li><a class="dropdown-item" href="#">Lorem</a></li>
+                <li><a class="dropdown-item" href="#">Lorem</a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="/logout">Sair</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="mt-3">
+    <div th:object="${agendamentos}">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="mt-2">Agendamentos</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+
+            <div class="row">
+                <div class="row">
+                    <div class="col-12">
+                        <h6 class="mt-2" th:if="${agendamentos.isEmpty()}">Você não possui agendamentos</h6>
+                        <p th:if="${agendamentos.isEmpty()}">Agende uma visita clicando no botão abaixo</p>
+                        <a th:href="@{/anuncios}" class="btn btn-primary">Agendar visita</a>
+                    </div>
+                </div>
+                <table  th:if="${!agendamentos.isEmpty()}" class="table table-striped table-hover">
+                    <thead>
+
+                    <tr>
+                        <th scope="col">Data do Agendamento</th>
+                        <th scope="col">Turno</th>
+                        <th scope="col">Imovel</th>
+                        <th scope="col">Criado por</th>
+                        <th scope="col">Mensagem</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="agendamento : ${agendamentos}">
+                        <td th:text="'Agendado em, '+${#calendars.format(agendamento.dataAgendamento,'dd/MM/yyyy')}"></td>
+                        <td >
+                            <a th:href="@{/imoveis/detalhes/{id}(id=${agendamento.imovel.id})}">Visualizar imóvel</a>
+                        </td>
+                        <td th:text="${agendamento.usuario.nome}"></td>
+                        <td th:text="${agendamento.mensagem}"></td>
+                        <td th:text="${agendamento.turno}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="/js/bootstrap.min.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+
+
+</html>

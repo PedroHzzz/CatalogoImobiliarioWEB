@@ -1,0 +1,33 @@
+spring:
+  devtools:
+    restart:
+      poll-interval: 2s
+      enabled: true
+  output:
+    ansi:
+      enabled: always
+  config:
+    import: optional:file:.env[.properties]
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: 1234
+    url: jdbc:postgresql://localhost:5432/hireme
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  servlet:
+    multipart:
+      max-file-size: 10MB
+  web:
+    resources:
+      add-mappings: true
+      static-locations[0]: "file:src/main/resources/static/"
+      static-locations[1]: "classpath:/static/"
+server:
+  error:
+    include-stacktrace: never
+    include-message: always
+upload-dir: ${user.home}/uploads
+

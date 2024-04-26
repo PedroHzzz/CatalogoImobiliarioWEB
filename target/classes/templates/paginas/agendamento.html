@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Agende sua visita ao local</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon"/>
+</head>
+<body>
+<nav th:replace="~{componentes/nav/voltar :: voltar}"></nav>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mt-2">Agende sua visita ao local</h1>
+        </div>
+    </div>
+
+    <div class="container mt-3 mb-3">
+        <div th:object="${imovel}" class="row">
+            <img
+
+                    th:if="${imovel.foto != null}"
+                    th:src="@{${'/arquivos?nome=' + imovel.foto}}"
+                    th:class="'card-img' + 'card-img-top'"
+                    height="300"
+                    th:alt="${imovel.descricao}"
+            />
+
+            <img class="card-img card-img-top" th:unless="${imovel.foto != null}" src="/assets/not-found.jpg"
+                 height="300" th:alt="${imovel.descricao}">
+            <div class="col-md-6">
+
+
+                <p class="text-md-start text-body-emphasis"
+                   th:text="'Publicado em: '+${#calendars.format(imovel.dataCadastro,'dd MMMM yyyy')}"></p>
+
+                <a th:class="'btn btn-'+${imovel.disponivel ? 'primary': 'danger'}"
+                   th:utext="${imovel.disponivel? 'Comprar': 'Vendido'}">
+                    Carregando
+                </a>
+
+                <form method="POST" class="mt-3" th:object="${agendamentoDTO}"
+                      th:action="@{/imoveis/marcar/horario/{id} (id=${imovel.id})}">
+                    <div class="mb-3">
+                        <label for="mensagem" class="form-label"></label>
+                        <textarea
+                                th:field="${agendamentoDTO.mensagem}"
+                                type="text"
+                                class="form-control"
+                                placeholder="Agendar visita"
+                                id="mensagem"
+                                aria-describedby="nameHelp"></textarea>
+
+                        <div id="nameHelp" class="form-text">
+                            Mensagem para o vendedor
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="dataAgendamento" class="form-label"></label>
+                            <input
+                                    th:errorclass="is-invalid"
+                                    th:field="${agendamentoDTO.dataAgendamento}"
+                                    type="date"
+                                    class="form-control"
+                                    placeholder="Data"
+                                    id="dataAgendamento"
+                                    aria-describedby="dataVisita"></input>
+                            <div class="invalid-feedback" th:errors="${agendamentoDTO.dataAgendamento}"></div>
+                            <p th:if="${param.erro}" class="text-danger mt-3" role="alert">
+                                A data não deve ser no passado.
+                            </p>
+                            <div class="mb-3">
+                                <label for="turno" class="form-label"></label>
+                                <select id="turno" class="form-select" aria-label="select example"
+                                        th:field="${agendamentoDTO.turno}">
+                                    <option  th:value="Manhã">Manhã</option>
+                                    <option th:value="Tarde">Tarde</option>
+                                    <option th:value="Noite">Noite</option>
+
+                                </select>
+                            </div>
+                            <p th:if="${param.existente}" class="text-danger mt-3" role="alert">
+                                Já existe um agendamento nesta data, tente novamente.
+                            </p>
+
+                            <div id="dataVisita" class="form-text">
+                                Data para visita
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-primary">Agendar visita</button>
+                </form>
+
+                <a class="btn btn-success mt-3" th:if="${imovel.disponivel}"
+                   href="https://wa.me/6182852967/?text=Gostaria%20de%20agendar%20uma%20visita%20ao%20do%20imovel">
+                    <ion-icon name="logo-whatsapp"></ion-icon>
+                    Conversar com o vendedor
+                </a>
+
+            </div>
+            <div class="col-md-6">
+                <h1 th:utext="${imovel.nome}"></h1>
+
+                <span th:class="'badge '+${imovel.disponivel ? 'bg-success': 'bg-warning'}"
+                      th:utext="${imovel.disponivel? 'Novo': 'Premium'}">Disponível</span>
+
+                <p th:text="${imovel.descricao}"></p>
+                <p>
+                    Área total:
+                    <span th:utext="${imovel.tamanho}"></span>
+                    m<sup>2</sup>
+                </p>
+                <div class="text-xl-start ">
+                    <p class="icon-link  text-decoration-none">
+                        <ion-icon name="car-sport-outline"></ion-icon>
+                        <span th:text="${imovel.garagem}"></span>
+                    </p>
+                    <p class="icon-link  text-decoration-none">
+                        <ion-icon name="trash-bin-outline"></ion-icon>
+                        <span th:text="${imovel.quantidadeBanheiros}"></span>
+                    </p>
+                    <p class="icon-link  text-decoration-none">
+                        <ion-icon name="bed-outline"></ion-icon>
+                        <span th:text="${imovel.quantidadeQuartos}"></span>
+                    </p>
+
+                </div>
+                <div class="d-flex justify-content-between">
+                    <p class="card-text ">Preço de compra,
+                        <span class="text-body-emphasis font-weight-bold"
+                              th:text="'R'+${#numbers.formatCurrency(imovel.getPrecoCompra())}"></span>.
+                    </p>
+                    <p class="card-text ">Preço de aluguel,
+                        <span class="text-body-emphasis font-weight-bold"
+                              th:text="'R'+${#numbers.formatCurrency(imovel.getPrecoAluguel())}"></span>.
+                    </p>
+                </div>
+                <table class="table tab-content">
+                    <h4 class="card-title">Endereço</h4>
+                    <tbody>
+                    <tr>
+                        <th scope="row">CEP</th>
+                        <td th:text="${imovel.endereco.getCep()}"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Logradouro</th>
+                        <td th:text="${imovel.endereco.getLogradouro()}"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Bairro</th>
+                        <td th:text="${imovel.endereco.getLogradouro()}"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Complemento</th>
+                        <td th:text="${imovel.endereco.getComplemento()}"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Cidade</th>
+                        <td th:text="${imovel.endereco.getLocalidade()}"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Estado</th>
+                        <td th:text="${imovel.endereco.getUf()}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<footer th:replace="~{componentes/footer/rodape :: rodape}"></footer>
+s
+</body>
+<script
+        type="module"
+        src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+></script>
+<script
+        nomodule
+        src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+></script>
+</html>

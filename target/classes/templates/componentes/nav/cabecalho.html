@@ -1,0 +1,51 @@
+<nav th:fragment="cabecalho" class="navbar bg-body-tertiary border-bottom mb-1">
+    <div class="container-fluid">
+        <a class="navbar-brand d-none d-md-block" href="/">
+            <img
+                    src="/assets/logo.png"
+                    alt="Logo"
+                    width="32"
+                    height="32"
+                    class="d-inline-block"
+            />
+            Desapega
+        </a>
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link text-black" href="/">Página inicial</a>
+            </li>
+            <li class="nav-item"><a class="nav-link text-black" href="/imoveis/novo">Anunciar</a></li>
+            <li class="nav-item"><a class="nav-link text-black" href="/dashboard">Painel</a></li>
+            <li class="nav-item"><a class="nav-link text-black" href="/anuncios">Meus anúncios</a></li>
+            <li class="nav-item dropdown">
+                <a
+                        class="nav-link dropdown-toggle text-body"
+                        data-bs-toggle="dropdown"
+                        href="#"
+                        role="button"
+                        aria-expanded="false"
+                >Saiba mais</a
+                >
+                <ul class="dropdown-menu">
+
+                    <li><a class="dropdown-item" href="/tos">Termos de uso</a></li>
+                    <li>
+                        <hr class="dropdown-divider"/>
+                    </li>
+                    <li><a class="dropdown-item" href="/">Contate o suporte</a></li>
+                </ul>
+            </li>
+            <li class="nav-item" th:if="${!usuarioAutenticacao.estaAutenticado()}">
+                <a class="nav-link text-black" href="/login">Entrar</a>
+            </li>
+
+            <li class="nav-item" th:if="${!usuarioAutenticacao.estaAutenticado()}">
+                <a class="nav-link text-black" href="/cadastro">Cadastrar</a>
+            </li>
+            <li class="nav-item" th:if="${usuarioAutenticacao.estaAutenticado()}">
+                <a class="nav-link text-black" href="/logout">Sair</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
