@@ -6,6 +6,7 @@ import java.util.Date;
 import br.com.vs1.imobiliaria.core.models.Agendamento;
 import br.com.vs1.imobiliaria.core.models.Imovel;
 import br.com.vs1.imobiliaria.core.repositories.AgendamentoRepository;
+import br.com.vs1.imobiliaria.core.repositories.ImovelRepository;
 import br.com.vs1.imobiliaria.web.dtos.AgendamentoDTO;
 import br.com.vs1.imobiliaria.web.services.WebUsuarioService;
 import br.com.vs1.imobiliaria.web.utils.UsuarioAutenticacao;
@@ -28,14 +29,16 @@ public class ImovelController {
     private final AgendamentoRepository agendamentoRepository;
     private final WebUsuarioService webUsuarioService;
     private final ModelMapper mapper;
+    private final ImovelRepository imovelRepository;
 
-    public ImovelController(WebImovelService webImovelService, WebArquivoUploadService webArquivoUploadService, AgendamentoRepository agendamentoRepository, WebUsuarioService webUsuarioService, ModelMapper mapper) {
+    public ImovelController(WebImovelService webImovelService, WebArquivoUploadService webArquivoUploadService, AgendamentoRepository agendamentoRepository, WebUsuarioService webUsuarioService, ModelMapper mapper, ImovelRepository imovelRepository) {
         this.webImovelService = webImovelService;
 
         this.webArquivoUploadService = webArquivoUploadService;
         this.agendamentoRepository = agendamentoRepository;
         this.webUsuarioService = webUsuarioService;
         this.mapper = mapper;
+        this.imovelRepository = imovelRepository;
     }
 
     @GetMapping("/anuncios")
@@ -56,6 +59,9 @@ public class ImovelController {
 
         ModelAndView mv = new ModelAndView("/paginas/detalhe-imovel");
 
+        var imovel = imovelRepository.findById(id);
+        if (imovel.get().getSoftDelete() && !usuarioAutenticacao.getNomeUsuario().equals( imovel.get().getUsuario().getEmail()))
+            return new ModelAndView("redirect:/anuncios");
 
         mv.addObject("imovel", webImovelService.buscarPorId(id));
 
@@ -74,14 +80,13 @@ public class ImovelController {
     }
 
     @PostMapping("/imoveis/marcar/horario/{id}")
-    public ModelAndView marcarAgendamento( @PathVariable("id")Long id,   AgendamentoDTO agendamentoDTO, UsuarioAutenticacao usuarioAutenticacao){
+    public ModelAndView marcarAgendamento(@PathVariable("id") Long id, AgendamentoDTO agendamentoDTO, UsuarioAutenticacao usuarioAutenticacao) {
 
 
         ImovelDTO imovelDTO = webImovelService.buscarPorId(id);
         Imovel imovel = mapper.map(imovelDTO, Imovel.class);
-        if(agendamentoDTO.getDataAgendamento().before(new Date()))
-            return new ModelAndView("redirect:/imoveis/marcar/horario/"+id, "erro", true);
-
+        if (agendamentoDTO.getDataAgendamento().before(new Date()))
+            return new ModelAndView("redirect:/imoveis/marcar/horario/" + id, "erro", true);
 
 
         Agendamento agendamento = new Agendamento();
@@ -92,7 +97,6 @@ public class ImovelController {
         agendamento.setMensagem(agendamentoDTO.getMensagem());
         agendamento.setUsuario(webUsuarioService.busca(usuarioAutenticacao.getNomeUsuario()));
         agendamentoRepository.save(agendamento);
-
 
 
         return new ModelAndView("redirect:/agendamentos");
@@ -153,7 +157,11 @@ public class ImovelController {
     @GetMapping("/imoveis/excluir/{id}")
     public ModelAndView excluirImovel(@PathVariable("id") Long id) {
 
-        webImovelService.deletarImovel(id);
+        var imovel = imovelRepository.findById(id).get();
+
+        imovel.setSoftDelete(!imovel.getSoftDelete());
+
+        imovelRepository.save(imovel);
 
         return new ModelAndView("redirect:/anuncios");
     }

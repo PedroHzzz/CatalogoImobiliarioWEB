@@ -43,7 +43,7 @@
                class="btn btn-link">Editar</a>
             <a th:href="@{/imoveis/excluir/{id}(id=${imovel.id})}"
                th:if="${usuarioAutenticacao.getNomeUsuario() == imovel.getUsuario().getEmail()}"
-               class="btn btn-danger">Excluir</a>
+               class="btn btn-warning">Desabilitar/Reativar</a>
 
 
             <a class="btn btn-outline-light text-dark rounded-4 disabled" th:if="${imovel.disponivel}"

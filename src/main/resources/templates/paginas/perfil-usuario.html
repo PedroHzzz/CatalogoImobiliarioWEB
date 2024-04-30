@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Perfil do usuario</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+<div th:replace="~{componentes/nav/sidebar :: sidebar}"></div>
+<nav th:replace="~{componentes/nav/nav-dashobard :: navdashboard}"></nav>
+
+<div class="container mt-3 mb-3">
+    <div th:object="${usuario}" class="row">
+        <div class="col-12">
+            <h1 class="mt-2">Seu perfil</h1>
+            <p class="text-break">
+                <strong>Nome:</strong> [[*{nome}]]
+            </p>
+            <p class="text-break">
+                <strong>E-mail:</strong> [[*{email}]]
+            </p>
+            <p class="text-break">
+                <strong>CPF:</strong> [[*{cpf}]]
+            </p>
+            <p class="text-break">
+                <strong>Telefone:</strong> [[*{telefone}]]
+            </p>
+            <p class="text-break">
+                <strong>Data Nascimento:</strong> [[*{dataNascimento}]]
+            </p>
+
+            <a th:href="@{/dashboard/user/perfil/editar}"> Alterar Dados</a>
+        </div>
+    </div>
+</div>
+
+</div>
+
+</body>
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+
+</html>

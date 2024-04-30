@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,7 @@ public class WebUsuarioService implements UserDetailsService {
         return usuarioOptional.isPresent();
 
     }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Usuario> usuario = usuarioRepository.findByEmail(username);
@@ -64,6 +66,17 @@ public class WebUsuarioService implements UserDetailsService {
         } catch (Exception e) {
             throw new UsernameNotFoundException("Email already exists");
         }
+    }
+
+    public Usuario atualizar(UsuarioDTO usuarioDTO) {
+        Usuario usuario = usuarioRepository.findById(usuarioDTO.getId()).get();
+        usuario.setNome(usuarioDTO.getNome() == null ? usuario.getNome() : usuarioDTO.getNome());
+        usuario.setCpf(usuarioDTO.getCpf() == null ? usuario.getCpf() : usuarioDTO.getCpf());
+        usuario.setSenha(usuarioDTO.getSenha() != null ? passwordEncoder.encode(usuarioDTO.getSenha()) : usuario.getPassword());
+
+        usuarioRepository.save(usuario);
+
+        return usuario;
     }
 
     public Usuario busca(String nomeUsuario) {

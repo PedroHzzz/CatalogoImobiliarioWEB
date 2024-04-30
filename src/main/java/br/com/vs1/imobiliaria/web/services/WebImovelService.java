@@ -65,7 +65,8 @@ public class WebImovelService {
         imovelDTO.setEndereco(endereco);
         imovelDTO.setDataCadastro(new Date());
         imovelDTO.setUsuario(webUsuarioService.busca(autenticado.getNomeUsuario()));
-        imovelRepository.save(mapper.map(imovelDTO, Imovel.class));
+        var imovel = mapper.map(imovelDTO, Imovel.class);
+        imovelRepository.save(imovel);
     }
 
     public void atualizarImovel(Long id, ImovelDTO imovelDTO) {

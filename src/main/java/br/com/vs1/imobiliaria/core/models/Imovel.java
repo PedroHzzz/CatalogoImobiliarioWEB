@@ -38,6 +38,10 @@ public class Imovel implements Serializable {
 
     private String foto;
 
+    @Column(name = "soft_delete", columnDefinition = "boolean default false")
+    private Boolean softDelete;
+
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco_id",updatable = false)
     private Endereco endereco;
@@ -46,6 +50,8 @@ public class Imovel implements Serializable {
     @JoinColumn(name = "usuario_id",updatable = false)
     private Usuario usuario;
     private Date dataCadastro;
+
+
 
     public Imovel() {
     }
@@ -184,6 +190,14 @@ public class Imovel implements Serializable {
         this.endereco = endereco;
     }
 
+    public Boolean getSoftDelete() {
+        return softDelete;
+    }
+
+    public void setSoftDelete(Boolean softDelete) {
+        this.softDelete = softDelete;
+    }
+
     @Override
     public String toString() {
         return "Imovel [id=" + id + ", nome=" + nome + ", precoCompra=" + precoCompra + ", precoAluguel=" + precoAluguel
@@ -191,6 +205,7 @@ public class Imovel implements Serializable {
                 + quantidadeBanheiros + ", garagem=" + garagem + ", disponivel=" + disponivel + ", descricao="
                 + descricao + ", foto=" + foto + ", endereco=" + endereco + ", dataCadastro=" + dataCadastro + "]";
     }
+
 
 
 }
