@@ -44,13 +44,13 @@
                     </thead>
                     <tbody>
                     <tr th:each="agendamento : ${agendamentos}">
-                        <td th:text="'Agendado para: '+${#calendars.format(agendamento.dataAgendamento,'dd/MM/yyyy')}"></td>
-                        <td th:text="${agendamento.turno}"></td>
+                        <td th:text="'Agendado em, '+${#calendars.format(agendamento.dataAgendamento,'dd/MM/yyyy')}"></td>
                         <td >
                             <a th:href="@{/imoveis/detalhes/{id}(id=${agendamento.imovel.id})}">Visualizar imóvel</a>
                         </td>
                         <td th:text="${agendamento.usuario.nome}"></td>
                         <td th:text="${agendamento.mensagem}"></td>
+                        <td th:text="${agendamento.turno}"></td>
                     </tr>
                     </tbody>
                 </table>
